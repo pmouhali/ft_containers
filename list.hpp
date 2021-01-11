@@ -32,8 +32,6 @@ namespace ft {
 			};
 
 			list<T>::node*		_dummy;
-			list<T>::node*		_head;
-			list<T>::node*		_tail;
 			size_type			_size;
 
 		public:
@@ -170,12 +168,12 @@ namespace ft {
 
 			
 /* Default constructor */
-			explicit list<T> () : _dummy(new node()), _head(0), _tail(0), _size(0) {
+			explicit list<T> () : _dummy(new node()), _size(0) {
 			}
 
 /* Fill constructor */
 			explicit list<T> (size_type n, const T & val = T())
-				: _dummy(new node()), _head(0), _tail(0), _size(0) {
+				: _dummy(new node()), _size(0) {
 				for (unsigned int i = 0; i < n; i++) {
 					push_back(val);
 				}
@@ -190,15 +188,15 @@ namespace ft {
 					!std::numeric_limits<InputIterator>::is_integer, 
 					InputIterator >::type * = 0
 			)
-				: _dummy(new node()), _head(0), _tail(0), _size(0) {
+				: _dummy(new node()), _size(0) {
 				for (InputIterator it = first; it != last; it++) {
 					push_back(*it);
 				}
 			}
 
 /* Copy constructor */
-			list<T> (const list<T> & x) : _dummy(new node()), _head(0), _tail(0), _size(0) {
-				list<T>::node* current = x._head;
+			list<T> (const list<T> & x) : _dummy(new node()), _size(0) {
+				list<T>::node* current = x._dummy->_next;
 				while (current != x._dummy) {
 					push_back(current->_data);
 					current = current->_next;
@@ -308,9 +306,6 @@ namespace ft {
 					_size -= 1;
 				}
 
-				_tail = _dummy->_prev;
-				_head = _dummy->_next;
-
 				return (iterator(right));
 			}
 
@@ -339,10 +334,6 @@ namespace ft {
 				right->_prev = new_node;
 					
 				_size += 1;
-
-				// tmp
-				_tail = _dummy->_prev;
-				_head = _dummy->_next;
 
 				return (iterator(new_node));
 			}
