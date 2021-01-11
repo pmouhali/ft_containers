@@ -338,9 +338,30 @@ namespace ft {
 				return (iterator(new_node));
 			}
 
+			void		insert (iterator position, size_type n, const T& val) {
+				for (size_type i = 0; i < n; i++) {
+					insert(position, val);
+				}
+			}
+
+			template < class InputIterator >
+			void		insert (
+				iterator position,
+				InputIterator first,
+				InputIterator last,
+				typename enable_if<
+					!std::numeric_limits<InputIterator>::is_integer, 
+					InputIterator >::type * = 0
+			) {
+				while (first != last) {
+					insert(position, *first);
+					first++;
+				}
+			}
+
 /* list::max_size */
 			size_type	max_size () const {
-				return std::numeric_limits<size_type>::max() / sizeof(list<T>::node);
+				return std::numeric_limits<size_type>::max() / sizeof(node);
 			}
 
 /* list::pop_back */
