@@ -260,9 +260,7 @@ namespace ft {
 
 /* list::clear */
 			void	clear () {
-				while (empty() == false) {
-					pop_back();
-				}
+				erase(begin(), end());
 			}
 
 /* list::empty */
@@ -291,14 +289,9 @@ namespace ft {
 			iterator erase (iterator first, iterator last) {
 				node*	left = first._n->_prev;
 				node*	right = last._n;
-				node*	current;
 
-				while (first != last) {
-					current = first._n;
-					first++;
-					delete current;
-					_size -= 1;
-				}
+				if (left == NULL)
+					return (iterator(_dummy));
 
 				if (right == _dummy && left == _dummy) {
 					_dummy->_next = NULL;
@@ -306,6 +299,13 @@ namespace ft {
 				} else {
 					left->_next = right;
 					right->_prev = left;
+				}
+
+				while (first != last) {
+					right = first._n;
+					first++;
+					delete right;
+					_size -= 1;
 				}
 
 				_tail = _dummy->_prev;
