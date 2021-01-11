@@ -141,7 +141,7 @@ namespace ft {
 						return _n->_data;
 					}
 					/* dereferencing ->overload const */
-					T*			operator->() {
+					T*			operator->() const {
 						return &(_n->_data);
 					}
 					/* ++ overload prefix */
@@ -280,6 +280,38 @@ namespace ft {
 			const_iterator	end () const {
 				const_iterator e(_dummy);
 				return e;			
+			}
+
+/* list::erase */
+
+			iterator erase (iterator position) {
+				return erase(position, ++position);
+			}
+
+			iterator erase (iterator first, iterator last) {
+				node*	left = first._n->_prev;
+				node*	right = last._n;
+				node*	current;
+
+				while (first != last) {
+					current = first._n;
+					first++;
+					delete current;
+					_size -= 1;
+				}
+
+				if (right == _dummy && left == _dummy) {
+					_dummy->_next = NULL;
+					_dummy->_prev = NULL;
+				} else {
+					left->_next = right;
+					right->_prev = left;
+				}
+
+				_tail = _dummy->_prev;
+				_head = _dummy->_next;
+
+				return (iterator(right));
 			}
 
 /* list::front */
