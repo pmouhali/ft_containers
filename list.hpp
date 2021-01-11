@@ -323,6 +323,30 @@ namespace ft {
 				return (*(_dummy->_next))._data;
 			}
 
+/* list::insert */
+			iterator	insert (iterator position, const T& val) {
+				list<T>::node*	right = position._n;
+				list<T>::node*	left = position._n->_prev;
+
+				if (left == NULL)
+					left = _dummy;	
+
+				list<T>::node* new_node = new list<T>::node(
+					val, right, left
+				);
+
+				left->_next = new_node;
+				right->_prev = new_node;
+					
+				_size += 1;
+
+				// tmp
+				_tail = _dummy->_prev;
+				_head = _dummy->_next;
+
+				return (iterator(new_node));
+			}
+
 /* list::max_size */
 			size_type	max_size () const {
 				return std::numeric_limits<size_type>::max() / sizeof(list<T>::node);
