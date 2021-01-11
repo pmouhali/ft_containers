@@ -235,11 +235,11 @@ namespace ft {
 
 /* list::back */
 			T&		back () {
-				return (*_tail)._data;
+				return (*(_dummy->_prev))._data;
 			}
 
 			const T&		back () const {
-				return (*_tail)._data;
+				return (*(_dummy->_prev))._data;
 			}
 
 /* list::begin */
@@ -316,11 +316,11 @@ namespace ft {
 
 /* list::front */
 			T&		front () {
-				return (*_head)._data;
+				return (*(_dummy->_next))._data;
 			}
 
 			const T&		front () const {
-				return (*_head)._data;
+				return (*(_dummy->_next))._data;
 			}
 
 /* list::max_size */
