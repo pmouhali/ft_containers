@@ -354,86 +354,22 @@ namespace ft {
 
 /* list::pop_back */
 			void	pop_back () {
-				list<T>::node* node_to_delete = _tail;	
-
-				if (!_tail)
-					return ;
-				if (_tail->_prev == _dummy) {// then the node to pop is the only node in the container
-					_tail = NULL;
-					_head = NULL;
-				} else {
-					_tail = _tail->_prev;
-				}
-				// dummy node
-				_dummy->_prev = _tail;
-				_dummy->_next = _head;
-				if (_tail)
-					_tail->_next = _dummy;
-				// dummy node
-
-				delete node_to_delete;
-				_size -= 1;
+				erase(--end(), end());
 			}
 
 /* list::pop_front */
 			void	pop_front () {
-				list<T>::node* node_to_delete = _head;	
-
-				if (!_head)
-					return ;
-				_head = _head->_next;
-				// dummy node
-				_dummy->_next = _head;
-				if (_head)
-					_head->_prev = _dummy;
-				// dummy node
-
-				delete node_to_delete;
-				_size -= 1;			
-
+				erase(begin(), ++begin());
 			}
 
 /* list::push_back */
 			void	push_back (const T& val) {
-				if (empty()) {
-					push_front(val);
-				}
-				else {
-					list<T>::node* new_node = new list<T>::node(
-						val, _dummy, _tail
-					);
-
-					_tail->_next = new_node;
-					_tail = new_node;
-					_size += 1;
-
-					// dummy node
-					_dummy->_prev = new_node;
-					// dummy node
-				}
+				insert(end(), val);
 			}
 
 /* list::push_front */
 			void	push_front (const T& val) {
-				list<T>::node* new_node = new list<T>::node(
-					val, _head, _dummy
-				);
-				
-				if (_head)
-					_head->_prev = new_node;
-				_head = new_node;
-				if (!_tail)
-					_tail = _head;
-				_size += 1;
-
-				// dummy node
-				_dummy->_next = new_node;
-
-				if (!_dummy->_prev) {
-					_dummy->_prev = new_node;
-					new_node->_next = _dummy;
-				}
-				// dummy node
+				insert(begin(), val);
 			}
 
 /* list::resize */
