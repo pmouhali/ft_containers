@@ -412,6 +412,10 @@ namespace ft {
 				splice(position, x, first, last);
 			}
 
+			void	splice (iterator position, list &x, iterator i) {
+				splice(position, x, i, ++i);
+			}
+
 			void	splice (iterator position, list& x, iterator first, iterator last) {
 				/* defini les nodes d'extrémités pour chaque liste			*/
 				/* et pour la sequence de node, ce qui facilite les manips	*/
