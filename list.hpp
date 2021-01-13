@@ -405,6 +405,13 @@ namespace ft {
 			}
 
 /* list::splice */
+			void	splice(iterator position, list& x) {
+				iterator first = x.begin();
+				iterator last = x.end();
+				
+				splice(position, x, first, last);
+			}
+
 			void	splice (iterator position, list& x, iterator first, iterator last) {
 				/* defini les nodes d'extrémités pour chaque liste			*/
 				/* et pour la sequence de node, ce qui facilite les manips	*/
@@ -417,7 +424,9 @@ namespace ft {
 
 				/* si le premier element du range est aussi le deuxieme		*/
 				/* le range est vide										*/
-				if (first == last)
+				/* si position est aussi last, alors la liste reçue en arg	*/
+				/* est aussi *this, et l'opération est inutile				*/
+				if (first == last || position == last)
 					return ;
 				/* si le node qui précèdera le premier node de la nouvelle	*/
 				/* séquence insérée est null, alors la liste de reception	*/
