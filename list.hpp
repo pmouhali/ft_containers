@@ -364,6 +364,9 @@ namespace ft {
 				return std::numeric_limits<size_type>::max() / sizeof(node);
 			}
 
+/* list::merge */
+			
+
 /* list::pop_back */
 			void	pop_back () {
 				erase(--end(), end());
@@ -399,6 +402,70 @@ namespace ft {
 /* list::size */
 			size_type	size () const {
 				return _size;
+			}
+
+/* list::splice */
+			void	splice (iterator position, list& x, iterator first, iterator last) {
+				/* defini les nodes d'extrémités pour chaque liste			*/
+				/* et pour la sequence de node, ce qui facilite les manips	*/
+				node*	left = position._n->_prev;
+				node*	right = position._n;
+				node*	x_left = first._n->_prev;
+				node*	x_right = last._n;
+				node*	x_seq_start = first._n;
+				node*	x_seq_end = last._n->_prev;
+
+				/* si le premier element du range est aussi le deuxieme		*/
+				/* le range est vide										*/
+				if (first == last)
+					return ;
+				/* si le node qui précèdera le premier node de la nouvelle	*/
+				/* séquence insérée est null, alors la liste de reception	*/
+				/* est vide, set ce node à dummy permet une insertion		*/
+				/* valide, voir schema de lsite avec dummy node				*/
+				if (left == NULL)
+					left = _dummy;
+				/* même chose pour la liste qui perds la sequence de node	*/
+				if (x_left == NULL)
+					x_left = x._dummy;
+
+				/* compte le nombre de node présent dans la séquence		*/
+				/* cela doit être fait avant les opérations d'insertion		*/
+				/* puisque les itérateurs restent valides mais les liste	*/
+				/* auront été modifiées */
+				int node_seq_len = 0;
+				while (first != last) {
+					first++;
+					node_seq_len++;
+				}
+
+				/* attache la séquence de nodes dans la liste de reception	*/
+				left->_next = x_seq_start;
+				x_seq_start->_prev = left;
+				right->_prev = x_seq_end;
+				x_seq_end->_next = right;
+
+				/* répare la liste reçue en paramètre						*/
+				/* une séquence d'un ou plusieurs nodes a été retirée		*/
+				/* si le node à gauche de la sequence						*/
+				/* et le node à droite de la sequence						*/
+				/* correspondent tout deux au dummy node de la liste		*/
+				/* alors tout les nodes de la liste on été retirés			*/
+				/* et il faut reset les pointeur du dummy					*/
+				/* pour éviter de créer une boucle infinie					*/
+				/* sinon les nodes sont rattachés entre eux					*/
+				if (x_left == x._dummy && x_right == x._dummy) {
+					x_left->_next = NULL;
+					x_right->_prev = NULL;
+				} else {
+					x_left->_next = x_right;
+					x_right->_prev = x_left;
+				}
+
+				/* met à jour la taille des deux listes, cette action est	*/
+				/* située ici plutôt qu'au niveau du compte en cas de throw	*/
+				_size += node_seq_len;
+				x._size -= node_seq_len;
 			}
 	};
 }
