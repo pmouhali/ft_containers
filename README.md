@@ -38,6 +38,28 @@ Les **iterator** et **const_iterator** peuvent être comparés. Il faut donc fou
 
 Si l'objet list est const qualified, alors les fonctions **begin()** et **end()** vont retourner un **const_iterator**. D'où leur overload avec **const_iterator** en return type.
 
+### Sort
+
+**list::sort** n'utilises pas **std::sort** mais implémentes le sien.
+
+|    N ints     | Bubble sort   | Quick sort      | STL :crown:   |
+| ------------: | :-----------: |:-------------:  | :----------:  |
+|       10      |    0.00 sec   |     0.00 sec    |    0.00 sec   |
+|     1000      |    3.65 sec   |     0.00 sec    |    0.00 sec   |
+|     3000      |  101.53 sec   |     0.00 sec    |    0.00 sec   |
+|    10000      |      X        |     0.01 sec    |    0.01 sec   |
+|   100000      |      X        |     0.21 sec    |    0.05 sec   |
+|  1000000      |      X        |    12.52 sec    |    0.80 sec   |
+| 10000000      |      X        | > 2272.76 sec   |  134.14 sec   |
+
+Notes :
+
+Le temps a été calculé avec la commande **time**, il corresponds à N push + execution du tri.
+
+Les valeurs ont été générées de manière random avec le range 0..3000. Donc les très longues listes comportaient énormément de doublons.
+
+Mon quicksort est basique et non optimisé. Son code diffère de celui qu'on peut voir pour une liste doublement chainée puisque ici les nodes sont swappés directement, et non les valeurs, ce qui implique de mettre à jour les pointeurs sur node après chaque swap, etc. Il pourrait donc être plus rapide.
+
 ## RESSOURCES
 
 code source de la libstdc++ :
@@ -59,3 +81,11 @@ https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
 https://stackoverflow.com/questions/30287402/c-nested-class-in-class-template-declaration
 
 https://42born2code.slack.com/archives/CMX2R5JSW/p1604438239334300
+
+quick sort :
+
+https://www.youtube.com/watch?v=0SkOjNaO1XY
+
+https://www.geeksforgeeks.org/quick-sort/
+
+https://www.geeksforgeeks.org/quicksort-for-linked-list/
