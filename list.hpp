@@ -42,7 +42,8 @@ namespace ft {
 				second = ++begin();
 				e = end();
 				while (second != e) {
-					if (!comp(*first, *second) || *first == *second) {
+					
+					if (!comp(*first, *second)) {
 						splice(first, *this, second);
 						first = begin();
 						second = ++begin();
@@ -465,8 +466,6 @@ namespace ft {
 			size_type	size () const {
 				return _size;
 			}
-
-
 
 /* list::sort */
 			void	sort () {
