@@ -34,6 +34,69 @@ namespace ft {
 			list<T>::node*		_dummy;
 			size_type			_size;
 
+			template < class Compare >
+			void	_bubble_sort (Compare comp) {
+				iterator first, second, e;
+				
+				first = begin();
+				second = ++begin();
+				e = end();
+				while (second != e) {
+					if (!comp(*first, *second) || *first == *second) {
+						splice(first, *this, second);
+						first = begin();
+						second = ++begin();
+					} else {
+						first++;
+						second++;
+					}
+				}
+			}
+
+			template < class Compare >
+			node*	_partition (node* l, node* h, Compare comp) {
+				int		pivot = h->_data;
+				node*	i = l->_prev;
+				node*	tmp;
+
+				for (node* j = l; j != h; j = j->_next) {
+					if (comp(j->_data, pivot)) {
+						i = i->_next;
+						tmp = j->_next;
+						splice(iterator(i), *this, iterator(j));
+						splice(iterator(tmp), *this, iterator(i));
+						tmp = j;
+						j = i;
+						i = tmp;
+					}
+				}
+				i = i->_next;
+				tmp = h->_next;
+				splice(iterator(i), *this, iterator(h));
+				splice(iterator(tmp), *this, iterator(i));
+
+				return h;
+			}
+
+			template < class Compare >
+			void	_quick_sort (node* l, node* h, Compare comp) {
+				/* ne fonctionne pas sur une liste vide */
+				/* try saving ptrs before partition */
+				node*	left = l->_prev;
+				node*	right = h->_next;
+				
+				if (h != _dummy && l != h && l != h->_next) {
+					node* p = _partition(l, h, comp);
+
+					/* try restoring true order ptrs */
+					l = left->_next;
+					h = right->_prev;
+				
+					_quick_sort(l, p->_prev, comp);
+					_quick_sort(p->_next, h, comp);
+				}
+			}
+
 		public:
 
 			class iterator;
@@ -62,14 +125,13 @@ namespace ft {
 					bool		operator==(const iterator & x) const {
 						return _n == x._n;
 					}
-					/* != overload */
-					bool		operator!=(const iterator & x) const {
-						return _n != x._n;
-					}
 					bool		operator==(const const_iterator & x) const {
 						return _n == x._n;
 					}
 					/* != overload */
+					bool		operator!=(const iterator & x) const {
+						return _n != x._n;
+					}
 					bool		operator!=(const const_iterator & x) const {
 						return _n != x._n;
 					}
@@ -404,6 +466,20 @@ namespace ft {
 				return _size;
 			}
 
+
+
+/* list::sort */
+			void	sort () {
+				sort(std::less_equal<T>());
+			}
+
+			template < class Compare >
+			void	sort (Compare comp) {
+				if (empty() == false)
+					_quick_sort(_dummy->_next, _dummy->_prev, comp);
+			}
+
+
 /* list::splice */
 			void	splice(iterator position, list& x) {
 				iterator first = x.begin();
@@ -430,7 +506,7 @@ namespace ft {
 				/* le range est vide										*/
 				/* si position est aussi last, alors la liste reçue en arg	*/
 				/* est aussi *this, et l'opération est inutile				*/
-				if (first == last || position == last)
+				if (first == last || position == last || position == first)
 					return ;
 				/* si le node qui précèdera le premier node de la nouvelle	*/
 				/* séquence insérée est null, alors la liste de reception	*/
