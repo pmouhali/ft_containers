@@ -42,15 +42,15 @@ Si l'objet list est const qualified, alors les fonctions **begin()** et **end()*
 
 **list::sort** n'utilises pas **std::sort** mais implémentes le sien.
 
-|    N ints     | Bubble sort   | Quick sort      | STL :crown:   |
-| ------------: | :-----------: |:-------------:  | :----------:  |
-|       10      |    0.00 sec   |     0.00 sec    |    0.00 sec   |
-|     1000      |    3.65 sec   |     0.00 sec    |    0.00 sec   |
-|     3000      |  101.53 sec   |     0.00 sec    |    0.00 sec   |
-|    10000      |      X        |     0.01 sec    |    0.01 sec   |
-|   100000      |      X        |     0.21 sec    |    0.05 sec   |
-|  1000000      |      X        |    12.52 sec    |    0.80 sec   |
-| 10000000      |      X        | > 2272.76 sec   |  134.14 sec   |
+|    N ints     | Bubble sort   | Quick sort      | Quick sort      | STL :crown:   |
+| ------------: | :-----------: |:-------------:  |:-------------:  | :----------:  |
+|       10      |    0.00 sec   |     0.00 sec    |     0.00 sec    |    0.00 sec   |
+|     1000      |    3.65 sec   |     0.00 sec    |     0.00 sec    |    0.00 sec   |
+|     3000      |  101.53 sec   |     0.00 sec    |     0.01 sec    |    0.00 sec   |
+|    10000      |      X        |     0.01 sec    |     0.01 sec    |    0.01 sec   |
+|   100000      |      X        |     0.21 sec    |     0.07 sec    |    0.05 sec   |
+|  1000000      |      X        |    12.52 sec    | stack overflow  |    0.80 sec   |
+| 10000000      |      X        | > 2272.76 sec   | stack overflow  |  134.14 sec   |
 
 Notes :
 
@@ -59,6 +59,10 @@ Le temps a été calculé avec la commande **time**, il corresponds à N push + 
 Les valeurs ont été générées de manière random avec le range 0..3000. Donc les très longues listes comportaient énormément de doublons.
 
 Mon quicksort est basique et non optimisé. Son code diffère de celui qu'on peut voir pour une liste doublement chainée puisque ici les nodes sont swappés directement, et non les valeurs, ce qui implique de mettre à jour les pointeurs sur node après chaque swap, etc. Il pourrait donc être plus rapide.
+
+Le mergesort est exactement le même que celui ci : https://www.geeksforgeeks.org/merge-sort-for-doubly-linked-list/
+
+Les performances sont meilleures que le quicksort, par contre, pour une liste d'un million d'int, ça pète la stack. Une implémentation hybride (récursive + itérative) ou entièrement itérative ne poserai pas ce problème, mais est ce que les perfs seraient bonnes ? Idk. 
 
 ## RESSOURCES
 
@@ -82,10 +86,16 @@ https://stackoverflow.com/questions/30287402/c-nested-class-in-class-template-de
 
 https://42born2code.slack.com/archives/CMX2R5JSW/p1604438239334300
 
-quick sort :
+quicksort :
 
 https://www.youtube.com/watch?v=0SkOjNaO1XY
 
 https://www.geeksforgeeks.org/quick-sort/
 
 https://www.geeksforgeeks.org/quicksort-for-linked-list/
+
+mergesort :
+
+https://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
+
+https://afteracademy.com/blog/sort-list-merge-sort
