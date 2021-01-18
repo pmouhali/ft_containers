@@ -34,6 +34,8 @@ namespace ft {
 			list<T>::node*		_dummy;
 			size_type			_size;
 
+			/* bubblesort */
+
 			template < class Compare >
 			void	_bubble_sort (Compare comp) {
 				iterator first, second, e;
@@ -51,6 +53,24 @@ namespace ft {
 						first++;
 						second++;
 					}
+				}
+			}
+
+			/* quicksort */
+
+			template < class Compare >
+			void	_quicksort (node* l, node* h, Compare comp) {
+				node*	left = l->_prev;
+				node*	right = h->_next;
+				
+				if (h != _dummy && l != h && l != h->_next) {
+					node* p = _partition(l, h, comp);
+
+					l = left->_next;
+					h = right->_prev;
+				
+					_quicksort(l, p->_prev, comp);
+					_quicksort(p->_next, h, comp);
 				}
 			}
 
@@ -79,24 +99,72 @@ namespace ft {
 				return h;
 			}
 
-			template < class Compare >
-			void	_quick_sort (node* l, node* h, Compare comp) {
-				/* ne fonctionne pas sur une liste vide */
-				/* try saving ptrs before partition */
-				node*	left = l->_prev;
-				node*	right = h->_next;
-				
-				if (h != _dummy && l != h && l != h->_next) {
-					node* p = _partition(l, h, comp);
+			/* mergesort */
 
-					/* try restoring true order ptrs */
-					l = left->_next;
-					h = right->_prev;
-				
-					_quick_sort(l, p->_prev, comp);
-					_quick_sort(p->_next, h, comp);
-				}
+			template < class Compare >
+			void	_mergesort_wrapper(Compare comp) {
+					node* head = _dummy->_next;
+					_dummy->_next->_prev = NULL;
+					_dummy->_prev->_next = NULL;
+
+					head = _mergesort(head, comp);
+
+					_dummy->_next = head;
+					head->_prev = _dummy;
+					while (head->_next != NULL) {
+						head = head->_next;
+					}
+					_dummy->_prev = head;
+					head->_next = _dummy;
 			}
+
+			template < class Compare >
+			node *_merge(node *first, node *second, Compare comp)
+			{ 
+					if (!first) 
+							return second; 
+					if (!second) 
+							return first; 
+
+					if (comp(first->_data, second->_data)) 
+					{ 
+							first->_next = _merge(first->_next,second, comp); 
+							first->_next->_prev = first; 
+							return first; 
+					} 
+					else
+					{ 
+							second->_next = _merge(first,second->_next, comp);
+							second->_next->_prev = second; 
+							return second; 
+					} 
+			} 
+
+			template < class Compare >
+			node *_mergesort(node *head, Compare comp) 
+			{ 
+					if (!head || !head->_next) 
+							return head; 
+					node *second = split(head); 
+
+					head = _mergesort(head, comp); 
+					second = _mergesort(second, comp); 
+
+					return _merge(head,second, comp); 
+			} 
+
+			node *split(node *head) 
+			{ 
+					node *fast = head,*slow = head; 
+					while (fast->_next && fast->_next->_next) 
+					{ 
+							fast = fast->_next->_next; 
+							slow = slow->_next; 
+					} 
+					node *temp = slow->_next; 
+					slow->_next = NULL; 
+					return temp; 
+			} 
 
 		public:
 
@@ -475,9 +543,8 @@ namespace ft {
 			template < class Compare >
 			void	sort (Compare comp) {
 				if (empty() == false)
-					_quick_sort(_dummy->_next, _dummy->_prev, comp);
+					_quicksort(_dummy->_next, _dummy->_prev, comp);
 			}
-
 
 /* list::splice */
 			void	splice(iterator position, list& x) {
