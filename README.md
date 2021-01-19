@@ -42,7 +42,7 @@ Si l'objet list est const qualified, alors les fonctions **begin()** et **end()*
 
 **list::sort** n'utilises pas **std::sort** mais implémentes le sien.
 
-|    N ints     | Bubble sort   | Quick sort      | Quick sort      | STL :crown:   |
+|    N ints     |  Bubblesort   |  Quicksort      |  Mergesort      | STL :crown:   |
 | ------------: | :-----------: |:-------------:  |:-------------:  | :----------:  |
 |       10      |    0.00 sec   |     0.00 sec    |     0.00 sec    |    0.00 sec   |
 |     1000      |    3.65 sec   |     0.00 sec    |     0.00 sec    |    0.00 sec   |
@@ -71,6 +71,8 @@ code source de la libstdc++ :
 https://gcc.gnu.org/onlinedocs/gcc-4.6.2/libstdc++/api/a01055_source.html
 
 autres :
+
+https://cs.calvin.edu/activities/books/c++/intro/3e/WebItems/Ch14-Web/STL-List-14.4.pdf
 
 https://codefreakr.com/how-is-c-stl-list-implemented-internally/
 
