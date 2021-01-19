@@ -496,7 +496,30 @@ namespace ft {
 			}
 
 /* list::merge */
-			
+			void	merge (list<T> & x) {
+				merge(x, std::less_equal<T>());
+			}
+
+			template < class Compare >
+			void	merge (list<T> & x, Compare comp) {
+				iterator	it;
+				iterator	e;
+
+				if (!empty() && !x.empty() && &x != this) {
+					it = begin();
+					e = end();
+					while (!x.empty() && it != e) {
+						if (comp(x.front(), *it))
+							splice(it, x, x.begin());
+						else
+							it++;
+					}
+					if (!x.empty())
+						splice(end(), x);
+				}
+				else
+					splice(end(), x);
+			}
 
 /* list::pop_back */
 			void	pop_back () {
@@ -559,6 +582,13 @@ namespace ft {
 			}
 
 			void	splice (iterator position, list& x, iterator first, iterator last) {
+				/* si le premier element du range est aussi le deuxieme		*/
+				/* le range est vide										*/
+				/* si position est aussi last, alors la liste reçue en arg	*/
+				/* est aussi *this, et l'opération est inutile				*/
+				if (first == last || position == last || position == first)
+					return ;
+
 				/* defini les nodes d'extrémités pour chaque liste			*/
 				/* et pour la sequence de node, ce qui facilite les manips	*/
 				node*	left = position._n->_prev;
@@ -568,12 +598,6 @@ namespace ft {
 				node*	x_seq_start = first._n;
 				node*	x_seq_end = last._n->_prev;
 
-				/* si le premier element du range est aussi le deuxieme		*/
-				/* le range est vide										*/
-				/* si position est aussi last, alors la liste reçue en arg	*/
-				/* est aussi *this, et l'opération est inutile				*/
-				if (first == last || position == last || position == first)
-					return ;
 				/* si le node qui précèdera le premier node de la nouvelle	*/
 				/* séquence insérée est null, alors la liste de reception	*/
 				/* est vide, set ce node à dummy permet une insertion		*/
