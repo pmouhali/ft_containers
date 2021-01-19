@@ -547,6 +547,41 @@ namespace ft {
 				insert(begin(), val);
 			}
 
+/* list::remove */
+			void	remove (const T& val) {
+				iterator	current = begin();
+				iterator 	e = end();
+				iterator	to_rm;
+
+				while (current != e) {
+					if (*current == val) {
+						to_rm = current;
+						current++;
+						erase(to_rm);
+					}
+					else
+						current++;
+				}
+			}
+
+/* list::remove_if */
+			template < class Predicate >
+			void	remove_if (Predicate pred) {
+				iterator	current = begin();
+				iterator 	e = end();
+				iterator	to_rm;
+
+				while (current != e) {
+					if (pred(*current)) {
+						to_rm = current;
+						current++;
+						erase(to_rm);
+					}
+					else
+						current++;
+				}
+			}
+
 /* list::resize */
 			void	resize (size_type n, T val = T()) {
 				if (n < _size) {
