@@ -3,6 +3,7 @@
 
 # include <cstdlib>
 # include <limits>
+# include <functional>
 # include "shared.hpp"
 
 namespace ft {
@@ -266,11 +267,11 @@ namespace ft {
 						return _n != x._n;
 					}
 					/* dereferencing *overload */
-					T&			operator*() const {
+					const T&			operator*() const {
 						return _n->_data;
 					}
 					/* dereferencing ->overload const */
-					T*			operator->() const {
+					const T*			operator->() const {
 						return &(_n->_data);
 					}
 					/* ++ overload prefix */
@@ -350,9 +351,7 @@ namespace ft {
 					InputIterator >::type * = 0
 			) {
 				clear();
-				for (InputIterator it = first; it != last; it++) {
-					push_back(*it);
-				}			
+				insert(_dummy, first, last);
 			}
 
 			void	assign (size_type n, const T & val) {
@@ -519,6 +518,13 @@ namespace ft {
 				}
 				else
 					splice(end(), x);
+			}
+
+/* list::operator= */
+			list<T>&	operator= (const list<T> & x) {
+				assign(x.begin(), x.end());
+
+				return *this;
 			}
 
 /* list::pop_back */
