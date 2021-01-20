@@ -687,6 +687,27 @@ namespace ft {
 				_size += node_seq_len;
 				x._size -= node_seq_len;
 			}
+
+/* list::unique */
+			template < class BinaryPredicate >
+			void	unique (BinaryPredicate bpred) {
+				if (_size > 1) {
+					iterator e = end();
+					iterator current = ++begin();
+					iterator tmp;
+
+					while (current != e) {
+						if (bpred(current._n->_prev->_data, *current) == true) {
+							tmp = current;
+							current++;
+							erase(current._n->_prev);
+						}
+						else
+							current++;
+					}
+				}
+			}
+
 	};
 }
 
