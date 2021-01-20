@@ -171,6 +171,8 @@ namespace ft {
 
 			class iterator;
 			class const_iterator;
+			class reverse_iterator;
+			class const_reverse_iterator;
 
 			class iterator {
 
@@ -294,6 +296,71 @@ namespace ft {
 					const_iterator	operator--(int) {
 						const_iterator tmp = *this;
 						_n = _n->_prev;
+						return tmp;
+					}
+			};
+
+			class reverse_iterator {
+
+				public:
+
+					list<T>::node *_n;
+
+					/* default constructor */
+					reverse_iterator () : _n(0) {}
+					/* value constructor */
+					reverse_iterator (node* n) : _n(n) {}
+					/* copy constructor */
+					reverse_iterator (const reverse_iterator & x) : _n(x._n) {}
+					/* assignation overload */
+					reverse_iterator&	operator=(const reverse_iterator & x) {
+						_n = x._n;
+						return *this;
+					}
+					/* destructor */
+					~reverse_iterator () {}
+					/* == overload */
+					bool		operator==(const reverse_iterator & x) const {
+						return _n == x._n;
+					}
+					bool		operator==(const const_reverse_iterator & x) const {
+						return _n == x._n;
+					}
+					/* != overload */
+					bool		operator!=(const reverse_iterator & x) const {
+						return _n != x._n;
+					}
+					bool		operator!=(const const_reverse_iterator & x) const {
+						return _n != x._n;
+					}
+					/* dereferencing *overload */
+					T&			operator*() const {
+						return _n->_data;
+					}
+					/* dereferencing ->overload const */
+					T*			operator->() {
+						return &(_n->_data);
+					}
+					/* ++ overload prefix */
+					reverse_iterator	operator++() {
+						_n = _n->_prev;
+						return *this;
+					}
+					/* ++ overload postfix */
+					reverse_iterator	operator++(int) {
+						reverse_iterator tmp = *this;
+						++*this;
+						return tmp;
+					}
+					/* -- overload prefix */
+					reverse_iterator	operator--() {
+						_n = _n->_next;
+						return *this;
+					}
+					/* -- overload postfix */
+					reverse_iterator	operator--(int) {
+						reverse_iterator tmp = *this;
+						_n = _n->_next;
 						return tmp;
 					}
 			};
@@ -547,6 +614,11 @@ namespace ft {
 				insert(begin(), val);
 			}
 
+/* list::rbegin */
+			reverse_iterator	rbegin () {
+				return (_dummy->_prev ? _dummy->_prev : _dummy);				
+			}
+
 /* list::remove */
 			void	remove (const T& val) {
 				iterator	current = begin();
@@ -580,6 +652,11 @@ namespace ft {
 					else
 						current++;
 				}
+			}
+
+/* list::rend */
+			reverse_iterator	rend () {
+				return (_dummy);
 			}
 
 /* list::resize */
