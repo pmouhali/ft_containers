@@ -594,6 +594,25 @@ namespace ft {
 				}
 			}
 
+/* list::reverse */
+			void	reverse () {
+				if (size() > 1) {
+					iterator	i = begin();
+					iterator	e = end();
+					node*		tmp;
+
+					while (i != e) {
+						tmp = i._n->_next;
+						i._n->_next = i._n->_prev;
+						i._n->_prev = tmp;
+						i--;
+					}
+					tmp = i._n->_next;
+					i._n->_next = i._n->_prev;
+					i._n->_prev = tmp;
+				}
+			}
+
 /* list::size */
 			size_type	size () const {
 				return _size;
