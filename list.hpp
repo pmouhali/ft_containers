@@ -688,6 +688,16 @@ namespace ft {
 				x._size -= node_seq_len;
 			}
 
+/* list::swap */
+			void	swap (list<T> & x) {
+				if (&x != this) {
+					iterator	old_begin = begin();
+
+					splice(old_begin, x, x.begin(), x.end());
+					x.splice(x.begin(), *this, old_begin, end());
+				}
+			}
+
 /* list::unique */
 			template < class BinaryPredicate >
 			void	unique (BinaryPredicate bpred) {
