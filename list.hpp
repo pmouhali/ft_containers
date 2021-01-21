@@ -887,6 +887,32 @@ namespace ft {
 			}
 
 	};
+
+/* Relational Operators for list */
+
+		template < class T >
+		bool operator== (const list<T> & lhs, const list<T> & rhs) {
+			if (lhs.size() == rhs.size()) {
+				typename list<T>::const_iterator	lhs_it = lhs.begin();	
+				typename list<T>::const_iterator	lhs_e = lhs.end();	
+				typename list<T>::const_iterator	rhs_it = rhs.begin();	
+
+				while (lhs_it != lhs_e) {
+					if (*lhs_it != *rhs_it)
+						return (false);
+					lhs_it++;
+					rhs_it++;
+				}
+				return (true);
+			}
+			return (false);
+		}
+
+		template < class T >
+		bool operator!= (const list<T> & lhs, const list<T> & rhs) {
+			return (!(lhs == rhs));
+		}
+
 }
 
 #endif
