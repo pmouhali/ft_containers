@@ -365,6 +365,73 @@ namespace ft {
 					}
 			};
 
+			class const_reverse_iterator {
+
+				public:
+
+					const list<T>::node *_n;
+
+					/* default constructor */
+					const_reverse_iterator () : _n(0) {}
+					/* value constructor */
+					const_reverse_iterator (node* n) : _n(n) {}
+					/* copy constructor */
+					const_reverse_iterator (const const_reverse_iterator & x) : _n(x._n) {}
+					/* copy constructor with reverse_iterator*/
+					const_reverse_iterator (const reverse_iterator & x) : _n(x._n) {}
+					/* assignation overload */
+					const_reverse_iterator&	operator=(const const_reverse_iterator & x) {
+						_n = x._n;
+						return *this;
+					}
+					/* destructor */
+					~const_reverse_iterator () {}
+					/* == overload */
+					bool		operator==(const const_reverse_iterator & x) const {
+						return _n == x._n;
+					}
+					bool		operator==(const reverse_iterator & x) const {
+						return _n == x._n;
+					}
+					/* != overload */
+					bool		operator!=(const const_reverse_iterator & x) const {
+						return _n != x._n;
+					}
+					bool		operator!=(const reverse_iterator & x) const {
+						return _n != x._n;
+					}
+					/* dereferencing *overload */
+					const T&			operator*() const {
+						return _n->_data;
+					}
+					/* dereferencing ->overload const */
+					const T*			operator->() {
+						return &(_n->_data);
+					}
+					/* ++ overload prefix */
+					const_reverse_iterator	operator++() {
+						_n = _n->_prev;
+						return *this;
+					}
+					/* ++ overload postfix */
+					const_reverse_iterator	operator++(int) {
+						const_reverse_iterator tmp = *this;
+						++*this;
+						return tmp;
+					}
+					/* -- overload prefix */
+					const_reverse_iterator	operator--() {
+						_n = _n->_next;
+						return *this;
+					}
+					/* -- overload postfix */
+					const_reverse_iterator	operator--(int) {
+						const_reverse_iterator tmp = *this;
+						_n = _n->_next;
+						return tmp;
+					}
+			};
+
 			
 /* Default constructor */
 			explicit list<T> () : _dummy(new node()), _size(0) {
@@ -442,15 +509,13 @@ namespace ft {
 			iterator	begin () {
 				list<T>::node *begin_node =
 					_dummy->_next ? _dummy->_next : _dummy;
-				iterator b(begin_node); 
-				return b;
+				return begin_node;
 			}
 
 			const_iterator	begin () const {
 				list<T>::node *begin_node =
 					_dummy->_next ? _dummy->_next : _dummy;
-				const_iterator b(begin_node); 
-				return b;
+				return begin_node;
 			}
 
 /* list::clear */
@@ -466,8 +531,7 @@ namespace ft {
 /* list::end */
 
 			iterator end () {
-				iterator e(_dummy);
-				return e;
+				return _dummy;
 			}
 
 			const_iterator	end () const {
@@ -619,6 +683,10 @@ namespace ft {
 				return (_dummy->_prev ? _dummy->_prev : _dummy);				
 			}
 
+			const reverse_iterator	rbegin () const {
+				return (_dummy->_prev ? _dummy->_prev : _dummy);				
+			}
+
 /* list::remove */
 			void	remove (const T& val) {
 				iterator	current = begin();
@@ -656,6 +724,10 @@ namespace ft {
 
 /* list::rend */
 			reverse_iterator	rend () {
+				return (_dummy);
+			}
+
+			const_reverse_iterator	rend () const {
 				return (_dummy);
 			}
 
