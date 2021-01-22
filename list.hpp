@@ -35,6 +35,11 @@ namespace ft {
 			list<T>::node*		_dummy;
 			size_type			_size;
 
+			/* unique predicate */
+			bool	_xeqy(T x, T y) {
+				return (x == y);
+			}
+
 			/* bubblesort */
 
 			template < class Compare >
@@ -77,7 +82,7 @@ namespace ft {
 
 			template < class Compare >
 			node*	_partition (node* l, node* h, Compare comp) {
-				int		pivot = h->_data;
+				T		pivot = h->_data;
 				node*	i = l->_prev;
 				node*	tmp;
 
@@ -550,7 +555,7 @@ namespace ft {
 				node*	right = last._n;
 
 				if (left == NULL)
-					return (iterator(_dummy));
+					return (_dummy);
 
 				if (right == _dummy && left == _dummy) {
 					_dummy->_next = NULL;
@@ -567,7 +572,7 @@ namespace ft {
 					_size -= 1;
 				}
 
-				return (iterator(right));
+				return (last);
 			}
 
 /* list::front */
@@ -867,18 +872,34 @@ namespace ft {
 			}
 
 /* list::unique */
+
+			void	unique () {
+				if (_size > 1) {
+					iterator e = end();
+					iterator current = begin();
+
+					current++;
+					while (current != e) {
+						if (*current == current._n->_prev->_data) {
+							current = erase(current);
+						}
+						else
+							current++;
+					}
+				}
+			}
+			
+
 			template < class BinaryPredicate >
 			void	unique (BinaryPredicate bpred) {
 				if (_size > 1) {
 					iterator e = end();
-					iterator current = ++begin();
-					iterator tmp;
-
+					iterator current = begin();
+					
+					current++;
 					while (current != e) {
-						if (bpred(current._n->_prev->_data, *current) == true) {
-							tmp = current;
-							current++;
-							erase(current._n->_prev);
+						if (bpred(*current, current._n->_prev->_data)) {
+							current = erase(current);
 						}
 						else
 							current++;
@@ -945,6 +966,11 @@ namespace ft {
 		template < class T >
 		bool operator<= (const list<T> & lhs, const list<T> & rhs) {
 			return (!(rhs < lhs));
+		}
+
+		template < class T >
+		void	swap (list<T> & x, list<T> & y) {
+			x.swap(y);
 		}
 
 }
