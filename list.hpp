@@ -913,6 +913,40 @@ namespace ft {
 			return (!(lhs == rhs));
 		}
 
+		template < class T >
+		bool operator< (const list<T> & lhs, const list<T> & rhs) {
+			typename list<T>::const_iterator	lhs_it = lhs.begin();	
+			typename list<T>::const_iterator	lhs_e = lhs.end();	
+			typename list<T>::const_iterator	rhs_it = rhs.begin();		
+
+			if (lhs == rhs)
+				return (false);
+			while (lhs_it != lhs_e) {
+				if (*rhs_it < *lhs_it)
+					return (false);
+				else if (*lhs_it < *rhs_it)
+					return (true);
+				lhs_it++;
+				rhs_it++;
+			}
+			return (lhs_it != rhs_it);
+		}
+
+		template < class T >
+		bool operator> (const list<T> & lhs, const list<T> & rhs) {
+			return (rhs < lhs);
+		}
+
+		template < class T >
+		bool operator>= (const list<T> & lhs, const list<T> & rhs) {
+			return (!(lhs < rhs));
+		}
+
+		template < class T >
+		bool operator<= (const list<T> & lhs, const list<T> & rhs) {
+			return (!(rhs < lhs));
+		}
+
 }
 
 #endif
