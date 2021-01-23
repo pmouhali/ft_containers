@@ -184,7 +184,7 @@ namespace ft {
 				public:
 
 					typedef ptrdiff_t			difference_type;
-					typedef std::bidirectional_iterator_tag	iterator_category;
+					typedef ft::bidirectional_iterator_tag	iterator_category;
 					typedef T				value_type;
 					typedef T*				pointer;
 					typedef T&				reference;
