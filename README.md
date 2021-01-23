@@ -64,6 +64,28 @@ Le mergesort est exactement le même que celui ci : https://www.geeksforgeeks.or
 
 Les performances sont meilleures que le quicksort, par contre, pour une liste d'un million d'int, ça pète la stack. Une implémentation hybride (récursive + itérative) ou entièrement itérative ne poserai pas ce problème, mais est ce que les perfs seraient bonnes ? Idk. 
 
+## reverse_iterator
+
+Est une classe template, qui prends un itérateur (list::iterator, vector::iterator, etc) en paramètre.
+
+Un objet de type **reverse_iterator** va fonctionner comme un wrapper autour d'un objet de type **iterator**. Les méthodes proposées sont toutes implémentées avec les méthodes de l'itérateur à partir duquel l'objet est construit.
+
+    from http://cplusplus.com/reference/iterator/reverse_iterator/operator++/
+```
+    reverse_iterator operator++(int) {
+      reverse_iterator temp = *this;
+      ++(*this);
+      return temp;
+    }
+```
+Commentaire intéressant from le code source :
+
+The fundamental relation between a reverse_iterator and its corresponding iterator i is established by the identity:
+
+    &*(reverse_iterator(i)) == &*(i - 1)
+
+This mapping is dictated by the fact that while there is always a pointer past the end of an array, there might not be a valid pointer before the beginning of an array.
+
 ## RESSOURCES
 
 code source de la libstdc++ :
@@ -95,6 +117,12 @@ https://www.youtube.com/watch?v=0SkOjNaO1XY
 https://www.geeksforgeeks.org/quick-sort/
 
 https://www.geeksforgeeks.org/quicksort-for-linked-list/
+
+reverse_iterator :
+
+https://gcc.gnu.org/onlinedocs/gcc-6.4.0/libstdc++/api/a01623_source.html
+
+http://cplusplus.com/reference/iterator/reverse_iterator/
 
 mergesort :
 
