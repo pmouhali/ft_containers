@@ -1,9 +1,6 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
-# include <cstdlib>
-# include <limits>
-# include <functional>
 # include "shared.hpp"
 
 namespace ft {
@@ -174,14 +171,23 @@ namespace ft {
 
 		public:
 
+
 			class iterator;
 			class const_iterator;
-			class reverse_iterator;
-			class const_reverse_iterator;
+
+/* list::typedefs */
+			typedef	ft::reverse_iterator<iterator>		reverse_iterator;
+			typedef	ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			class iterator {
 
 				public:
+
+					typedef ptrdiff_t			difference_type;
+					typedef std::bidirectional_iterator_tag	iterator_category;
+					typedef T				value_type;
+					typedef T*				pointer;
+					typedef T&				reference;
 
 					list<T>::node *_n;
 
@@ -213,11 +219,11 @@ namespace ft {
 						return _n != x._n;
 					}
 					/* dereferencing *overload */
-					T&			operator*() const {
+					reference			operator*() const {
 						return _n->_data;
 					}
 					/* dereferencing ->overload const */
-					T*			operator->() {
+					pointer			operator->() {
 						return &(_n->_data);
 					}
 					/* ++ overload prefix */
@@ -247,6 +253,13 @@ namespace ft {
 			class const_iterator {
 
 				public:
+					
+					typedef ptrdiff_t			difference_type;
+					typedef std::bidirectional_iterator_tag	iterator_category;
+					typedef T				value_type;
+					typedef const T*			pointer;
+					typedef const T&			reference;
+
 
 					const list<T>::node *_n;
 
@@ -274,11 +287,11 @@ namespace ft {
 						return _n != x._n;
 					}
 					/* dereferencing *overload */
-					const T&			operator*() const {
+					reference			operator*() const {
 						return _n->_data;
 					}
 					/* dereferencing ->overload const */
-					const T*			operator->() const {
+					pointer			operator->() const {
 						return &(_n->_data);
 					}
 					/* ++ overload prefix */
@@ -304,139 +317,6 @@ namespace ft {
 						return tmp;
 					}
 			};
-
-			class reverse_iterator {
-
-				public:
-
-					list<T>::node *_n;
-
-					/* default constructor */
-					reverse_iterator () : _n(0) {}
-					/* value constructor */
-					reverse_iterator (node* n) : _n(n) {}
-					/* copy constructor */
-					reverse_iterator (const reverse_iterator & x) : _n(x._n) {}
-					/* assignation overload */
-					reverse_iterator&	operator=(const reverse_iterator & x) {
-						_n = x._n;
-						return *this;
-					}
-					/* destructor */
-					~reverse_iterator () {}
-					/* == overload */
-					bool		operator==(const reverse_iterator & x) const {
-						return _n == x._n;
-					}
-					bool		operator==(const const_reverse_iterator & x) const {
-						return _n == x._n;
-					}
-					/* != overload */
-					bool		operator!=(const reverse_iterator & x) const {
-						return _n != x._n;
-					}
-					bool		operator!=(const const_reverse_iterator & x) const {
-						return _n != x._n;
-					}
-					/* dereferencing *overload */
-					T&			operator*() const {
-						return _n->_data;
-					}
-					/* dereferencing ->overload const */
-					T*			operator->() {
-						return &(_n->_data);
-					}
-					/* ++ overload prefix */
-					reverse_iterator	operator++() {
-						_n = _n->_prev;
-						return *this;
-					}
-					/* ++ overload postfix */
-					reverse_iterator	operator++(int) {
-						reverse_iterator tmp = *this;
-						++*this;
-						return tmp;
-					}
-					/* -- overload prefix */
-					reverse_iterator	operator--() {
-						_n = _n->_next;
-						return *this;
-					}
-					/* -- overload postfix */
-					reverse_iterator	operator--(int) {
-						reverse_iterator tmp = *this;
-						_n = _n->_next;
-						return tmp;
-					}
-			};
-
-			class const_reverse_iterator {
-
-				public:
-
-					const list<T>::node *_n;
-
-					/* default constructor */
-					const_reverse_iterator () : _n(0) {}
-					/* value constructor */
-					const_reverse_iterator (node* n) : _n(n) {}
-					/* copy constructor */
-					const_reverse_iterator (const const_reverse_iterator & x) : _n(x._n) {}
-					/* copy constructor with reverse_iterator*/
-					const_reverse_iterator (const reverse_iterator & x) : _n(x._n) {}
-					/* assignation overload */
-					const_reverse_iterator&	operator=(const const_reverse_iterator & x) {
-						_n = x._n;
-						return *this;
-					}
-					/* destructor */
-					~const_reverse_iterator () {}
-					/* == overload */
-					bool		operator==(const const_reverse_iterator & x) const {
-						return _n == x._n;
-					}
-					bool		operator==(const reverse_iterator & x) const {
-						return _n == x._n;
-					}
-					/* != overload */
-					bool		operator!=(const const_reverse_iterator & x) const {
-						return _n != x._n;
-					}
-					bool		operator!=(const reverse_iterator & x) const {
-						return _n != x._n;
-					}
-					/* dereferencing *overload */
-					const T&			operator*() const {
-						return _n->_data;
-					}
-					/* dereferencing ->overload const */
-					const T*			operator->() {
-						return &(_n->_data);
-					}
-					/* ++ overload prefix */
-					const_reverse_iterator	operator++() {
-						_n = _n->_prev;
-						return *this;
-					}
-					/* ++ overload postfix */
-					const_reverse_iterator	operator++(int) {
-						const_reverse_iterator tmp = *this;
-						++*this;
-						return tmp;
-					}
-					/* -- overload prefix */
-					const_reverse_iterator	operator--() {
-						_n = _n->_next;
-						return *this;
-					}
-					/* -- overload postfix */
-					const_reverse_iterator	operator--(int) {
-						const_reverse_iterator tmp = *this;
-						_n = _n->_next;
-						return tmp;
-					}
-			};
-
 			
 /* Default constructor */
 			explicit list<T> () : _dummy(new node()), _size(0) {
@@ -468,10 +348,7 @@ namespace ft {
 /* Copy constructor */
 			list<T> (const list<T> & x) : _dummy(new node()), _size(0) {
 				list<T>::node* current = x._dummy->_next;
-				while (current != x._dummy) {
-					push_back(current->_data);
-					current = current->_next;
-				}
+				*this = x;
 			}
 
 /* Destructor */
@@ -685,11 +562,11 @@ namespace ft {
 
 /* list::rbegin */
 			reverse_iterator	rbegin () {
-				return (_dummy->_prev ? _dummy->_prev : _dummy);				
+				return reverse_iterator(end());
 			}
 
 			const reverse_iterator	rbegin () const {
-				return (_dummy->_prev ? _dummy->_prev : _dummy);				
+				return const_reverse_iterator(end());
 			}
 
 /* list::remove */
@@ -729,11 +606,11 @@ namespace ft {
 
 /* list::rend */
 			reverse_iterator	rend () {
-				return (_dummy);
+				return reverse_iterator(begin());
 			}
 
 			const_reverse_iterator	rend () const {
-				return (_dummy);
+				return const_reverse_iterator(begin());
 			}
 
 /* list::resize */
