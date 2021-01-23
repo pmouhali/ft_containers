@@ -32,11 +32,6 @@ namespace ft {
 			list<T>::node*		_dummy;
 			size_type			_size;
 
-			/* unique predicate */
-			bool	_xeqy(T x, T y) {
-				return (x == y);
-			}
-
 			/* bubblesort */
 
 			template < class Compare >
