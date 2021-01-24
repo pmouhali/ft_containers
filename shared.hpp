@@ -17,6 +17,7 @@ namespace ft {
 	typedef unsigned long size_type;
 
 	struct bidirectional_iterator_tag {};
+	struct random_access_iterator_tag {};
 
 	template < typename _iterator >
 	class	reverse_iterator {
