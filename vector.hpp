@@ -399,9 +399,10 @@ namespace ft {
 			};
 
 /* vector::typedef */
-			typedef T	value_type;
-			typedef T&	reference;
-			typedef T*	pointer;
+			typedef T		value_type;
+			typedef T&		reference;
+			typedef const T&	const_reference;
+			typedef T*		pointer;
 
 /* vector::vector default */
 			explicit vector () : _size(0), _capacity(0), _a(0) {}
@@ -455,7 +456,20 @@ namespace ft {
 				else
 					return _a;
 			}
-			
+
+/* vector::erase */
+			iterator	erase (iterator position) {
+				return erase(position, ++position);
+			}
+
+			iterator	erase (iterator first, iterator last) {
+				typename iterator::difference_type	n = (_a + _size) - last._p;
+				typename iterator::difference_type	r = first._p - _a;
+
+				_size -= (last._p - first._p);
+				_fake_memmove(first._p, last._p, n);
+				return _a + r;
+			}
 
 /* vector::insert */
 			
@@ -516,6 +530,15 @@ namespace ft {
 					position++;
 				}
 				_size += n;
+			}
+
+/* vector::operator[] */
+			reference operator[] (size_type n) {
+				return _a[n];
+			}
+
+			const_reference operator[] (size_type n) const {
+				return _a[n];
 			}
 
 /* vector::push_back */
