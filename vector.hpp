@@ -531,6 +531,11 @@ namespace ft {
 				}
 			}
 
+/* vector::size */
+			size_type	size () const {
+				return _size;
+			}
+
 	};
 }
 
