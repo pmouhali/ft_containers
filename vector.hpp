@@ -518,6 +518,11 @@ namespace ft {
 				_size += n;
 			}
 
+/* vector::push_back */
+			void	push_back (const value_type & val) {
+				insert(end(), val);
+			}
+
 /* vector::reserve */
 			void	reserve (size_type n) {
 				if (n > _capacity) {
