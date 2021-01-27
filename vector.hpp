@@ -14,13 +14,27 @@ namespace ft {
 			size_type	_capacity;
 			T*		_a;
 
+		/* C stdlib fake memmove */
+			T*		_fake_memmove (T* dest, const T* src, size_type n) {
+				size_type i;
 
-		/* copy n elements from b and assign them to a */
-			void	_arraycpy(T* a, const T* b, size_type n) {
-				for (size_type i = 0; i < n; i++) {
-					a[i] = b[i];
+				if (dest && src) {
+					i = 0;
+					if (dest <= src) {
+						while (i < n) {
+							dest[i] = src[i];
+							i++;
+						}
+					} else {
+						while (n > 0) {
+							dest[n - 1] = src[n - 1];
+							n--;
+						}
+					}
 				}
+				return (dest);
 			}
+
 
 		public:
 			
@@ -391,6 +405,11 @@ namespace ft {
 				insert(_a, n, val);
 			}
 
+/* vector::~vector*/
+			~vector () {
+				delete[] _a;
+			}
+
 /* vector::begin */
 			iterator	begin () {
 				return _a;
@@ -417,35 +436,16 @@ namespace ft {
 			
 
 /* vector::insert */
-			// compte le nombre d'elements à insérer
-			// reserve si l'espace est insuffisant
-			// ensuite diviser les sequences d'elements en trois pool
-			// 1. Elements positionés avant la position d'insertion
-			// 2. Elements positionés après la positon d'insertion
-			// 3. Nouveaux elements à insérer
-			// decaler part2, copier partie 3 
-
-			void	_array_left_shift (pointer a, size_type len, size_type n) {
-				// a b c _ _ _ _ _ _
-				// 0 1 2 3 4 5 6 7 8
-				for (size_type i = 0; i < len; i++) {
-					a[i + n] = a[i];
-					//a[i] = 0;
-			 	}
-			}
-
-
+			
 			iterator	insert (iterator position, const value_type & val) {
 				typename iterator::difference_type	dist = position._p - _a;
 
 				insert(position, 1, val);
-				
 				return _a + dist; 
 			}
 
 			void	insert (iterator position, size_type n, const value_type & val) {
 				typename iterator::difference_type	dist;
-				typename iterator::difference_type	nright;
 
 				if ((_size + n) > _capacity) {
 					if (position._p == NULL)
@@ -457,14 +457,12 @@ namespace ft {
 					
 					position = _a + dist;
 				}
-				nright = (_a + _size) - position._p;
-				_array_left_shift(position._p, nright, n);	
 
+				_fake_memmove(position._p + n, position._p, (_a + _size) - position._p);
 				for (size_type i = 0; i < n; i++) {
 					*position = val;
 					position++;
 				}
-
 				_size += n;
 			}
 
@@ -474,8 +472,7 @@ namespace ft {
 						!std::numeric_limits<InputIterator>::is_integer,
 						InputIterator 
 					>::type * = 0)
-				{
-				/* if an invalid poistion or range is specified : undefined behavior*/
+			{
 				typename iterator::difference_type	dist;
 				typename iterator::difference_type	n = last - first;
 
@@ -490,14 +487,12 @@ namespace ft {
 					position = _a + dist;
 				}
 				
-				_array_left_shift(position._p, _size, n);	
-
+				_fake_memmove(position._p + n, position._p, (_a + _size) - position._p);
 				while (first != last) {
 					*position = *first;
 					first++;
 					position++;
 				}
-
 				_size += n;
 			}
 
@@ -507,14 +502,10 @@ namespace ft {
 					T*	old_memory_block = _a;
 					T*	new_memory_block = new T[n];
 
-					_arraycpy(new_memory_block, old_memory_block, _size);
-					// copie les elements dans le nouveau bloc memoire
-					_capacity = n;
-					// update le var capacity avec la nouvelle capacity
+					_fake_memmove(new_memory_block, old_memory_block, _size);
 					delete[] old_memory_block;
-					// delete l'ancien block mémoire _a
+					_capacity = n;
 					_a = new_memory_block;
-					// fait pointer _a sur le nouveau bloc mémoire
 				}
 			}
 
