@@ -35,6 +35,13 @@ namespace ft {
 				return (dest);
 			}
 
+		/* function in charge of the reallocation strategy */
+			size_type	_the_right_amount_of_memory(size_type n) {
+				if (_capacity < (_size + n))
+					return (_size + n);
+				else
+					return (_capacity * 2);
+			}	
 
 		public:
 			
@@ -405,6 +412,21 @@ namespace ft {
 				insert(_a, n, val);
 			}
 
+/* vector::vector range */
+			template < class InputIterator >
+			vector (InputIterator first, InputIterator last,
+				typename enable_if<!std::numeric_limits<InputIterator>::is_integer,
+					InputIterator>::type * = 0) 
+				: _size(0), _capacity(0), _a(0)
+			{
+				insert(_a, first, last);	
+			}
+
+/* vector::vector copy */
+			vector (const vector & x) : _size(0), _capacity(0), _a(0) {
+				insert(_a, x.begin(), x.end());
+			}
+
 /* vector::~vector*/
 			~vector () {
 				delete[] _a;
@@ -453,7 +475,7 @@ namespace ft {
 					else
 						dist = position._p - _a;
 					
-					reserve((_size + n) * 2);
+					reserve(_the_right_amount_of_memory(n));
 					
 					position = _a + dist;
 				}
@@ -482,7 +504,7 @@ namespace ft {
 					else
 						dist = position._p - _a;
 					
-					reserve((_size + n) * 2);
+					reserve(_the_right_amount_of_memory(n));
 					
 					position = _a + dist;
 				}
