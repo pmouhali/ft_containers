@@ -403,6 +403,9 @@ namespace ft {
 			typedef T&		reference;
 			typedef const T&	const_reference;
 			typedef T*		pointer;
+			typedef const T*	const_pointer;
+			typedef ptrdiff_t	difference_type;
+			typedef size_type	size_type;
 
 /* vector::vector default */
 			explicit vector () : _size(0), _capacity(0), _a(0) {}
@@ -592,6 +595,8 @@ namespace ft {
 
 /* vector::reserve */
 			void	reserve (size_type n) {
+				if (n > max_size())
+					throw std::length_error("vector::reserve");
 				if (n > _capacity) {
 					T*	old_memory_block = _a;
 					T*	new_memory_block = new T[n];
