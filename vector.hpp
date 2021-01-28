@@ -445,6 +445,19 @@ namespace ft {
 				insert(_a, n, val);		
 			}
 
+/* vector::at */
+			reference at (size_type n) {
+				if (n >= 0 && n < _size)
+					return operator[](n);
+				throw std::out_of_range("");
+			}
+
+			const_reference at (size_type n) const {
+				if (n >= 0 && n < _size)
+					return operator[](n);
+				throw std::out_of_range("");
+			}
+
 /* vector::begin */
 			iterator	begin () {
 				return _a;

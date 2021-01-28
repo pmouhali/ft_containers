@@ -5,6 +5,7 @@
 # include <functional>
 # include <cstdlib>
 # include <cstddef>
+# include <stdexcept>
 
 namespace ft {
 
