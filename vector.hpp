@@ -458,6 +458,15 @@ namespace ft {
 				throw std::out_of_range("");
 			}
 
+/* vector::back */
+			reference back () {
+				return operator[](_size - 1);
+			}
+
+			const_reference back () const {
+				return operator[](_size - 1);
+			}
+
 /* vector::begin */
 			iterator	begin () {
 				return _a;
