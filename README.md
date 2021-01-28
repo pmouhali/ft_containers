@@ -86,6 +86,27 @@ The fundamental relation between a reverse_iterator and its corresponding iterat
 
 This mapping is dictated by the fact that while there is always a pointer past the end of an array, there might not be a valid pointer before the beginning of an array.
 
+## VECTOR
+
+### Stratégie de Réallocation
+
+Le vecteur de la STL est implémenté avec un tableau, ce qui implique une réallocation complète en cas d'insertion d'un nombre d'elements supérieur à la capacité mémoire de ce tableau.
+
+Afin d'éviter de réallouer de la mémoire à chaque insertion, une quantité de mémoire supérieure à la quantité simplement requise pour insérer les elements est allouée.
+
+**Comment est choisie cette quantité supplémentaire ?**
+
+La STL a choisi un facteur de croissance de 2.
+
+Et il **semblerait** que le choix se fasse de la manière suivante : pour N nombre d'éléments présent dans le vecteur et X nombre d'éléments que l'on souhaite ajouter dans le vecteur
+
+        if capacité * 2 < N + X
+            quantité_de_mémoire = N + X
+        else
+            quantité_de_mémoire = N * 2
+            
+D'autre stratégies de réallocation existent, bon exemple ici d'une réimplémentation optimisée de std::vector : https://github.com/facebook/folly/blob/master/folly/docs/FBVector.md
+
 ## RESSOURCES
 
 code source de la libstdc++ :
