@@ -3,6 +3,7 @@
 
 # include <limits>
 # include <functional>
+# include <memory>
 # include <cstdlib>
 # include <cstddef>
 # include <stdexcept>

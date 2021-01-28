@@ -10,9 +10,10 @@ namespace ft {
 
 		private:
 
-			size_type	_size;
-			size_type	_capacity;
-			T*		_a;
+			std::allocator<T>	_allocator;
+			size_type		_size;
+			size_type		_capacity;
+			T*			_a;
 
 		/* C stdlib fake memmove */
 			T*		_fake_memmove (T* dest, const T* src, size_type n) {
@@ -433,7 +434,8 @@ namespace ft {
 
 /* vector::~vector*/
 			~vector () {
-				delete[] _a;
+				clear();
+				_allocator.deallocate(_a, _capacity);
 			}
 
 /* vector::assign */
@@ -484,6 +486,11 @@ namespace ft {
 				return _capacity;
 			}
 
+/* vector::clear */
+			void	clear () {
+				erase(begin(), end());
+			}
+
 /* vector::end */
 			iterator	end () {
 				if (_a)
@@ -509,6 +516,10 @@ namespace ft {
 				typename iterator::difference_type	r = first._p - _a;
 
 				_size -= (last._p - first._p);
+
+				for (iterator it = first; it < last; it++) {
+					_allocator.destroy(it._p);
+				}	
 				_fake_memmove(first._p, last._p, n);
 				return _a + r;
 			}
@@ -599,11 +610,14 @@ namespace ft {
 					throw std::length_error("vector::reserve");
 				if (n > _capacity) {
 					T*	old_memory_block = _a;
-					T*	new_memory_block = new T[n];
+					T*	new_memory_block = _allocator.allocate(n);
+					size_type tmp = _size;
 
 					_fake_memmove(new_memory_block, old_memory_block, _size);
-					delete[] old_memory_block;
+					erase(begin(), end());
+					_allocator.deallocate(old_memory_block, _capacity);
 					_capacity = n;
+					_size = tmp;
 					_a = new_memory_block;
 				}
 			}
