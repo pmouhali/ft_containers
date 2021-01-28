@@ -491,6 +491,11 @@ namespace ft {
 				erase(begin(), end());
 			}
 
+/* vector::empty */
+			bool	empty () const {
+				return !_size;
+			}
+
 /* vector::end */
 			iterator	end () {
 				if (_a)
@@ -522,6 +527,15 @@ namespace ft {
 				}	
 				_fake_memmove(first._p, last._p, n);
 				return _a + r;
+			}
+
+/* vector::front */
+			reference	front () {
+				return operator[](0);
+			}
+
+			const_reference	front () const {
+				return operator[](0);
 			}
 
 /* vector::insert */
@@ -597,6 +611,11 @@ namespace ft {
 
 			const_reference operator[] (size_type n) const {
 				return _a[n];
+			}
+
+/* vector::pop_back */
+			void	pop_back () {
+				erase(end() - 1);
 			}
 
 /* vector::push_back */
