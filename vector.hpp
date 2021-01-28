@@ -433,6 +433,18 @@ namespace ft {
 				delete[] _a;
 			}
 
+/* vector::assign */
+			template < class InputIterator >
+			void	assign (InputIterator first, InputIterator last) {
+				_size = 0; 	// same as erase(begin(), end())
+				insert(_a, first, last);		
+			}
+
+			void	assign (size_type n, const value_type & val) {
+				_size = 0; 	// same as erase(begin(), end())
+				insert(_a, n, val);		
+			}
+
 /* vector::begin */
 			iterator	begin () {
 				return _a;
