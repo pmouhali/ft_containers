@@ -37,11 +37,11 @@ namespace ft {
 
 		/* function in charge of the reallocation strategy */
 			size_type	_the_right_amount_of_memory(size_type n) {
-				if (_capacity < (_size + n))
+				if (_capacity  * 2 <= (_size + n))
 					return (_size + n);
 				else
-					return (_capacity * 2);
-			}	
+					return (_size * 2);
+			}
 
 		public:
 			
@@ -476,6 +476,11 @@ namespace ft {
 				return _a;
 			}
 
+/* vector::capacity */
+			size_type capacity () const {
+				return _capacity;
+			}
+
 /* vector::end */
 			iterator	end () {
 				if (_a)
@@ -564,6 +569,11 @@ namespace ft {
 					position++;
 				}
 				_size += n;
+			}
+
+/* vector::max_size */
+			size_type max_size () const {
+				return std::numeric_limits<size_type>::max() / sizeof(pointer);
 			}
 
 /* vector::operator[] */
