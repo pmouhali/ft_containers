@@ -673,6 +673,15 @@ namespace ft {
 				}
 			}
 
+/* vector::resize */
+			void	resize (size_type n, value_type val = value_type()) {
+				if (n < _size) {
+					erase(begin() + n, end());
+				} else {
+					insert(end(), n - _size, val);
+				}
+			}
+
 /* vector::size */
 			size_type	size () const {
 				return _size;
