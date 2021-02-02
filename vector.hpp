@@ -687,7 +687,27 @@ namespace ft {
 				return _size;
 			}
 
+/* vector::swap */
+			void	swap (vector & x) {
+				size_type	tmp_capacity = _capacity;
+				size_type	tmp_size = _size;
+				pointer		tmp = _a;
+
+				_a = x._a;
+				x._a = tmp;
+				_size = x._size;
+				x._size = tmp_size;
+				_capacity = x._capacity;
+				x._capacity = tmp_capacity;
+			}
+
 	};
+
+/* non member overload vector::swap */
+	template < class T >
+	void	swap (vector<T> & x, vector<T> & y) {
+		x.swap(y);
+	}
 }
 
 #endif
