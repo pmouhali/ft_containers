@@ -228,7 +228,7 @@ namespace ft {
 
 					typedef ptrdiff_t			difference_type;
 					typedef ft::random_access_iterator_tag	iterator_category;
-					typedef T				value_type;
+					typedef const T				value_type;
 					typedef const T*			pointer;
 					typedef const T&			reference;
 
@@ -238,6 +238,8 @@ namespace ft {
 					const_iterator () : _p(0) {}
 
 			/* vector::const_iterator::const_iterator init */
+					const_iterator (pointer p) : _p(p) {}
+
 					const_iterator (T* p) : _p(p) {}
 
 			/* vector::const_iterator::const_iterator copy */
@@ -279,7 +281,7 @@ namespace ft {
 
 			/* vector::const_iterator::operator* */
 					reference			operator*() const {
-						return _p;
+						return *_p;
 					}
 
 			/* vector::const_iterator::operator-> */
@@ -440,13 +442,18 @@ namespace ft {
 
 /* vector::assign */
 			template < class InputIterator >
-			void	assign (InputIterator first, InputIterator last) {
-				_size = 0; 	// same as erase(begin(), end())
+			void	assign (InputIterator first, InputIterator last,
+				typename enable_if<
+					!std::numeric_limits<InputIterator>::is_integer,
+						InputIterator 
+					>::type * = 0
+			) {
+				erase(begin(), end());
 				insert(_a, first, last);		
 			}
 
 			void	assign (size_type n, const value_type & val) {
-				_size = 0; 	// same as erase(begin(), end())
+				erase(begin(), end());
 				insert(_a, n, val);		
 			}
 
@@ -602,6 +609,13 @@ namespace ft {
 /* vector::max_size */
 			size_type max_size () const {
 				return std::numeric_limits<size_type>::max() / sizeof(pointer);
+			}
+
+/* vector::operator= */
+			vector&	  operator= (const vector & x) {
+				assign(x.begin(), x.end());
+
+				return *this;
 			}
 
 /* vector::operator[] */
