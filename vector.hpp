@@ -708,6 +708,66 @@ namespace ft {
 	void	swap (vector<T> & x, vector<T> & y) {
 		x.swap(y);
 	}
+
+/* relational operators */
+	template < class T >
+	bool operator== (const vector<T> & lhs, const vector<T> & rhs) {
+		if (lhs.size() == rhs.size()) {
+			typename vector<T>::const_iterator lhs_i = lhs.begin();
+			typename vector<T>::const_iterator rhs_j = rhs.end();
+			typename vector<T>::const_iterator rhs_i = rhs.begin();
+
+			while (rhs_i < rhs_j) {
+				if (*lhs_i != *rhs_i)
+					return (false);
+				lhs_i++;
+				rhs_i++;
+			}
+			return true;
+		}
+		return false;
+	}
+
+
+	template < class T >
+	bool operator!= (const vector<T> & lhs, const vector<T> & rhs) {
+		return !(lhs == rhs);
+	}
+
+	template < class T >
+	bool operator< (const vector<T> & lhs, const vector<T> & rhs) {
+		typename vector<T>::const_iterator        lhs_it = lhs.begin();
+		typename vector<T>::const_iterator        lhs_e = lhs.end();
+		typename vector<T>::const_iterator        rhs_it = rhs.begin();
+
+		if (lhs == rhs)
+			return (false);
+		while (lhs_it != lhs_e) {
+			if (*rhs_it < *lhs_it)
+				return (false);
+			else if (*lhs_it < *rhs_it)
+				return (true);
+			lhs_it++;
+			rhs_it++;
+		}
+		return (lhs_it != rhs_it);
+	}
+
+	template < class T >
+	bool operator> (const vector<T> & lhs, const vector<T> & rhs) {
+		return (rhs < lhs);
+	}
+
+	template < class T >
+	bool operator<= (const vector<T> & lhs, const vector<T> & rhs) {
+		return !(rhs < lhs);
+	}
+
+	template < class T >
+	bool operator>= (const vector<T> & lhs, const vector<T> & rhs) {
+		return !(lhs < rhs);
+	}
+
 }
 
 #endif
