@@ -23,12 +23,24 @@ namespace ft {
 					i = 0;
 					if (dest <= src) {
 						while (i < n) {
-							dest[i] = src[i];
+							// fleaks
+						//	if (dest == _a)
+						//		_allocator.destroy(dest + i);
+
+							_allocator.construct(dest + i, src[i]);
+						//	// fleaks
+						//	if (src == _a)
+						//		_allocator.destroy(dest + i);
+
 							i++;
 						}
 					} else {
 						while (n > 0) {
-							dest[n - 1] = src[n - 1];
+							// fleaks
+						//	if (dest == _a)
+						//		_allocator.destroy(dest + (n - 1));
+
+							_allocator.construct(dest + (n - 1), src[n - 1]);
 							n--;
 						}
 					}
@@ -68,7 +80,7 @@ namespace ft {
 					iterator () : _p(0) {}
 
 			/* vector::iterator::iterator init */
-					iterator (T* p) : _p(p) {}
+					iterator (pointer p) : _p(p) {}
 
 			/* vector::iterator::iterator copy */
 					iterator (const iterator & x) : _p(x._p) {}
@@ -448,12 +460,12 @@ namespace ft {
 						InputIterator 
 					>::type * = 0
 			) {
-				erase(begin(), end());
+				clear();
 				insert(_a, first, last);		
 			}
 
 			void	assign (size_type n, const value_type & val) {
-				erase(begin(), end());
+				clear();
 				insert(_a, n, val);		
 			}
 
@@ -531,8 +543,10 @@ namespace ft {
 
 				for (iterator it = first; it < last; it++) {
 					_allocator.destroy(it._p);
-				}	
+				}
+
 				_fake_memmove(first._p, last._p, n);
+
 				return _a + r;
 			}
 
@@ -569,8 +583,13 @@ namespace ft {
 				}
 
 				_fake_memmove(position._p + n, position._p, (_a + _size) - position._p);
+
 				for (size_type i = 0; i < n; i++) {
-					*position = val;
+					//fleaks
+					if (position._p < _a + _size)
+						_allocator.destroy(position._p);
+
+					_allocator.construct(position._p, val);
 					position++;
 				}
 				_size += n;
@@ -599,7 +618,11 @@ namespace ft {
 				
 				_fake_memmove(position._p + n, position._p, (_a + _size) - position._p);
 				while (first != last) {
-					*position = *first;
+					//fleaks
+					if (position._p < _a + _size)
+						_allocator.destroy(position._p);
+
+					_allocator.construct(position._p, *first);
 					first++;
 					position++;
 				}
@@ -613,7 +636,8 @@ namespace ft {
 
 /* vector::operator= */
 			vector&	  operator= (const vector & x) {
-				assign(x.begin(), x.end());
+				if (*this != x)
+					assign(x.begin(), x.end());
 
 				return *this;
 			}
@@ -643,7 +667,7 @@ namespace ft {
 			}
 
 			const_reverse_iterator rbegin () const {
-				return reverse_iterator(end());
+				return const_reverse_iterator(end());
 			}
 
 /* vector::rend */
@@ -660,12 +684,12 @@ namespace ft {
 				if (n > max_size())
 					throw std::length_error("vector::reserve");
 				if (n > _capacity) {
-					T*	old_memory_block = _a;
-					T*	new_memory_block = _allocator.allocate(n);
-					size_type tmp = _size;
+					pointer		old_memory_block = _a;
+					pointer		new_memory_block = _allocator.allocate(n);
+					size_type	tmp = _size;
 
 					_fake_memmove(new_memory_block, old_memory_block, _size);
-					erase(begin(), end());
+					clear();
 					_allocator.deallocate(old_memory_block, _capacity);
 					_capacity = n;
 					_size = tmp;
@@ -727,7 +751,6 @@ namespace ft {
 		}
 		return false;
 	}
-
 
 	template < class T >
 	bool operator!= (const vector<T> & lhs, const vector<T> & rhs) {
