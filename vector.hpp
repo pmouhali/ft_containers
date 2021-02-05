@@ -44,6 +44,14 @@ namespace ft {
 					return (_size * 2);
 			}
 
+		/* will destroy n elements in received array and deallocate it */
+			void	_clean(T* ptr, size_type n, size_type size) {
+				for (size_type j = 0; j < n; j++) {
+					_allocator.destroy(ptr + j);
+				}
+				_allocator.deallocate(ptr, size);
+			}
+
 		public:
 			
 			class iterator;
@@ -436,8 +444,7 @@ namespace ft {
 
 /* vector::~vector*/
 			~vector () {
-				clear();
-				_allocator.deallocate(_a, _capacity);
+				_clean(_a, _size, _capacity);
 			}
 
 /* vector::assign */
@@ -525,41 +532,18 @@ namespace ft {
 
 			iterator	erase (iterator first, iterator last) {
 				typename iterator::difference_type	r = first._p - _a;
-
 				pointer	future;
-				size_type future_iterator;
-				iterator old_iterator;
 
 				future = _allocator.allocate(_capacity);
 
-				future_iterator = 0;
-				old_iterator = begin();
-				
 				/* copy the elements located before the first element to erase */
-				
-				while (old_iterator < first)
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					future_iterator++;
-					old_iterator++;
-				}
+				_fake_memmove(future, _a, first._p - _a);
 
 				/* copy the elements located after the element to erase */
-				old_iterator = last;
-				while (old_iterator < end())
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					old_iterator++;
-					future_iterator++;
-				}
-
+				_fake_memmove(future + (first._p - _a), last._p, (_a + _size) - last._p);
 				size_type tmp = _size - (last._p - first._p);
 				
-				/* destruct _a elements before deallocation */
-				for (size_type j = 0; j < _size; j++) {
-					_allocator.destroy(_a + j);
-				}
-				_allocator.deallocate(_a, _capacity);
+				_clean(_a, _size, _capacity);
 			
 				_a = future;
 				_size = tmp;
@@ -588,7 +572,6 @@ namespace ft {
 			void	insert (iterator position, size_type n, const value_type & val) {
 				pointer	future;
 				size_type future_iterator;
-				iterator old_iterator;
 
 				if ((_size + n) > _capacity) {
 					size_type	mems = _the_right_amount_of_memory(n);
@@ -599,39 +582,20 @@ namespace ft {
 					future = _allocator.allocate(_capacity);
 				}
 
-				future_iterator = 0;
-				old_iterator = begin();
-				
 				/* copy the elements located before the insertion position */
-				
-				while (old_iterator < position)
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					future_iterator++;
-					old_iterator++;
-				}
+				_fake_memmove(future, _a, position._p - _a);
 
 				/* insert elements at position */
-
+				future_iterator = position._p - _a;
 				for (size_type i = 0; i < n; i++) {
 					_allocator.construct(future + future_iterator, val);
 					future_iterator++;
 				}
 
 				/* copy the elements located after the insertion position */
-				while (old_iterator < end())
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					old_iterator++;
-					future_iterator++;
-				}
+				_fake_memmove(future + future_iterator, position._p, (_a + _size) - position._p);
+				_clean(_a, _size, _capacity);
 
-				/* destruct _a elements before deallocation */
-				for (size_type j = 0; j < _size; j++) {
-					_allocator.destroy(_a + j);
-				}
-
-				_allocator.deallocate(_a, _capacity);
 				_a = future;
 				_size += n;
 			}
@@ -645,7 +609,6 @@ namespace ft {
 			{
 				pointer	future;
 				size_type future_iterator;
-				iterator old_iterator;
 				size_type n = last - first;
 
 				if ((_size + n) > _capacity) {
@@ -657,20 +620,11 @@ namespace ft {
 					future = _allocator.allocate(_capacity);
 				}
 
-				future_iterator = 0;
-				old_iterator = begin();
-				
 				/* copy the elements located before the insertion position */
-				
-				while (old_iterator < position)
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					future_iterator++;
-					old_iterator++;
-				}
+				_fake_memmove(future, _a, position._p - _a);
 
 				/* insert elements at position */
-
+				future_iterator = position._p - _a;
 				while (first < last)
 				{
 					_allocator.construct(future + future_iterator, *first);
@@ -679,19 +633,9 @@ namespace ft {
 				}
 
 				/* copy the elements located after the insertion position */
-				while (old_iterator < end())
-				{
-					_allocator.construct(future + future_iterator, *old_iterator);
-					old_iterator++;
-					future_iterator++;
-				}
+				_fake_memmove(future + future_iterator, position._p, (_a + _size) - position._p);
+				_clean(_a, _size, _capacity);
 
-				/* destruct _a elements before deallocation */
-				for (size_type j = 0; j < _size; j++) {
-					_allocator.destroy(_a + j);
-				}
-
-				_allocator.deallocate(_a, _capacity);
 				_a = future;
 				_size += n;
 			}
@@ -757,10 +701,7 @@ namespace ft {
 
 					_fake_memmove(new_memory_block, old_memory_block, _size);
 
-					for (size_type i = 0; i < _size; i++) {
-						_allocator.destroy(old_memory_block + i);
-					}
-					_allocator.deallocate(old_memory_block, _capacity);
+					_clean(old_memory_block, _size, _capacity);
 					
 					_capacity = n;
 					_size = tmp;
