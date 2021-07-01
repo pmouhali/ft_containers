@@ -16,9 +16,9 @@ int 	main(void) {
 
 	/* right side assign */
 	tree._root->_right = new ft::bst<int>::node(10, tree._root, NULL, NULL);
-	tree._root->_right->_right = new ft::bst<int>::node(14, tree._root->_right->_right, NULL, NULL);
+	tree._root->_right->_right = new ft::bst<int>::node(14, tree._root->_right, NULL, NULL);
 
-	tree._root->_right->_right->_left = new ft::bst<int>::node(13, tree._root->_left->_right, NULL, NULL);
+	tree._root->_right->_right->_left = new ft::bst<int>::node(13, tree._root->_right->_right, NULL, NULL);
 
 	/* mock the leftmost node value */
 	tree._leftmost = tree._root->_left->_left;
@@ -29,16 +29,13 @@ int 	main(void) {
 	/* setup iterator */
 	ft::bst<int>::iterator	it = tree.begin();
 	ft::bst<int>::iterator	it_end = tree.end();
-/*
+
 	while (it != it_end) {
 		std::cout << it._n->_data << " ";
 		it++;
 	}
-*/
 
-
-	std::cout << it._n->_data << " ";
-	it++;
+/*
 	std::cout << it._n->_data << " ";
 	it++;
 	std::cout << it._n->_data << " ";
@@ -58,4 +55,5 @@ int 	main(void) {
 	std::cout << it._n->_data << " ";
 
 	std::cout << std::endl;
+*/
 }
