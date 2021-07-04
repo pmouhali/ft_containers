@@ -1,4 +1,6 @@
 # include <iostream>
+# include <functional>
+# include <algorithm>
 # include "../shared.hpp"
 
 void	tdefault_constructor () {
@@ -80,6 +82,16 @@ void	tmake_pair () {
   	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
 }
 
+void	tless () {
+	int foo[]={10,20,5,15,25};
+  	int bar[]={15,10,20};
+  
+	std::sort (foo, foo+5, std::less<int>());  // 5 10 15 20 25
+  	std::sort (bar, bar+3, std::less<int>());  //   10 15 20
+  	if (std::includes (foo, foo+5, bar, bar+3, std::less<int>()))
+    		std::cout << "foo includes bar.\n";
+}
+
 int	main () {
 	tdefault_constructor();
 	tinit_constructor();
@@ -87,4 +99,5 @@ int	main () {
 	tassignment_operator();
 	toperators();
 	tmake_pair();
+	tless();
 }

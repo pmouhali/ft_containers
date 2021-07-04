@@ -4,7 +4,7 @@ Needs to be implemented to have the correct data structure of map's nodes.
 [X] STD::MAKE_PAIR : https://www.cplusplus.com/reference/utility/make_pair/
 Needs to be implemented because we will use it to construct pairs.
 
-STD::MAP::KEY_COMP : https://www.cplusplus.com/reference/map/map/key_comp/
+[X] STD::LESS: https://www.cplusplus.com/reference/functional/less/
 Needs to be implemented because is required in insertions and as default parameter for constructors.
 
 ITERATOR : https://www.cplusplus.com/reference/iterator/BidirectionalIterator/

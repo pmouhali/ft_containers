@@ -187,6 +187,12 @@ namespace ft {
 		return ( pair<T1, T2>(x, y) );
 	}
 
+/* std::less */
+
+	template <class T> struct less {
+  		bool operator() (const T& x, const T& y) const {return x<y;}
+	};
+
 }
 
 #endif
