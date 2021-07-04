@@ -69,10 +69,22 @@ void	toperators () {
 	std::cout << (t >= u) << std::endl;
 }
 
+void	tmake_pair () {
+	ft::pair <int,int> foo;
+  	ft::pair <int,int> bar;
+
+  	foo = ft::make_pair (10,20);
+  	bar = ft::make_pair (10.5,'A');
+
+  	std::cout << "foo: " << foo.first << ", " << foo.second << '\n';
+  	std::cout << "bar: " << bar.first << ", " << bar.second << '\n';
+}
+
 int	main () {
 	tdefault_constructor();
 	tinit_constructor();
 	tcopy_constructor();
 	tassignment_operator();
 	toperators();
+	tmake_pair();
 }
