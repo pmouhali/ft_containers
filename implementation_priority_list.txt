@@ -1,0 +1,28 @@
+STD::PAIR : https://www.cplusplus.com/reference/utility/pair/
+Needs to be implemented to have the correct data structure of map's nodes.
+
+STD::MAKE_PAIR
+
+STD::MAP::KEY_COMP : https://www.cplusplus.com/reference/map/map/key_comp/
+Needs to be implemented because is required in insertions and as default parameter for constructors.
+
+ITERATOR : https://www.cplusplus.com/reference/iterator/BidirectionalIterator/
+Is a bidirectionnal one, needs to be implemented because insertions (and constructors) needs them.
+
+INSERT pt1: https://www.cplusplus.com/reference/map/map/insert/
+Implement the single element insertion, then we can implement erasing and balancing methods. 
+
+CLEAR: https://www.cplusplus.com/reference/map/map/clear/
+So we avoid causing memory leaks during testing.
+
+ERASE pt1: https://www.cplusplus.com/reference/map/map/erase/
+Implement the single element erase, then we can implement and test balancing method on both insertion and deletion.
+
+TREE BALANCING :
+https://www.cs.odu.edu/~zeil/cs361/latest/Public/avl/index.html#avl-trees
+https://appliedgo.net/balancedtree/
+The tree needs to be balanced if we want reach max perf. Also, an unbalanced tree is useless and a waste of time, and we should use an array.
+Balancing must happens during insertion and deletion.
+
+INSERT and ERASE pt2
+Now we can implement their overloads.

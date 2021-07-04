@@ -1,8 +1,5 @@
 /* BINARY SEARCH TREE */
 
-// TODO: goto_next_node isnt functional, solve the issue. See test results at
-// tests/bst.cpp
-
 #ifndef BST_HPP
 # define BST_HPP
 
